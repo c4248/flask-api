@@ -12,21 +12,17 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'jose'
 api = Api(app)
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
-
 jwt = JWT(app, authenticate, identity)
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
-    if request.method == 'OPTIONS':
-        response.headers['Access-Control-Allow-Methods'] = 'DELETE, GET, POST, PUT'
-        headers = request.headers.get('Access-Control-Request-Headers')
-        if headers:
-            response.headers['Access-Control-Allow-Headers'] = headers
-    return response
+# @app.after_request
+# def after_request(response):
+#     response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+#     if request.method == 'OPTIONS':
+#         response.headers['Access-Control-Allow-Methods'] = 'DELETE, GET, POST, PUT'
+#         headers = request.headers.get('Access-Control-Request-Headers')
+#         if headers:
+#             response.headers['Access-Control-Allow-Headers'] = headers
+#     return response
 
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(ItemList, '/items')
